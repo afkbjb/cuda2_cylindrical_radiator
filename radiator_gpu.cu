@@ -1,38 +1,50 @@
 #include "radiator_gpu.h"
-#define IDX(i,j,m) ((i)*(m)+(j))
-const int BX = 16, BY = 16;
+
+#define IDX(i,j,m) ((i)*(m) + (j))
 
 __global__ void propagate_kernel(
-    const float* oldM, float* newM,
-    int n, int m)
+    const float* oldM,
+    float*       newM,
+    int          n,
+    int          m)
 {
-    int i = blockIdx.y*BY + threadIdx.y;
-    int j = blockIdx.x*BX + threadIdx.x;
-    if (i>=n||j>=m) return;
+    int row = blockIdx.y * blockDim.y + threadIdx.y;
+    int col = blockIdx.x * blockDim.x + threadIdx.x;
+    if (row >= n || col >= m) return;
 
-    if (j==0) {
-        newM[IDX(i,0,m)] = oldM[IDX(i,0,m)];
+    if (col == 0) {
+        // Boundary remains unchanged
+        newM[IDX(row,0,m)] = oldM[IDX(row,0,m)];
     } else {
-        int jm2 = (j-2 + m)%m;
-        int jm1 = (j-1 + m)%m;
-        int jp1 = (j+1)%m;
-        int jp2 = (j+2)%m;
-        float s = 1.60f*oldM[IDX(i,jm2,m)]
-                + 1.55f*oldM[IDX(i,jm1,m)]
-                +       oldM[IDX(i,j ,m)]
-                + 0.60f*oldM[IDX(i,jp1,m)]
-                + 0.25f*oldM[IDX(i,jp2,m)];
-        newM[IDX(i,j,m)] = s * 0.2f;
+        // Wraparound index
+        int jm2 = (col - 2 + m) % m;
+        int jm1 = (col - 1 + m) % m;
+        int jp1 = (col + 1) % m;
+        int jp2 = (col + 2) % m;
+        float sum =
+            1.60f * oldM[IDX(row,jm2,m)] +
+            1.55f * oldM[IDX(row,jm1,m)] +
+                 1.0f * oldM[IDX(row, col,   m)] +
+            0.60f * oldM[IDX(row,jp1,m)] +
+            0.25f * oldM[IDX(row,jp2,m)];
+        newM[IDX(row,col,m)] = sum * 0.2f; // Equivalent to /5.0f
     }
 }
 
 __global__ void average_kernel(
-    const float* mat, float* avgs,
-    int n, int m)
+    const float* mat,
+    float*       avgs,
+    int          n,
+    int          m)
 {
-    int i = blockIdx.x;
-    if (i>=n) return;
+    // Each block corresponds to one row, threadIdx.x is not used
+    int row = blockIdx.x;
+    if (row >= n) return;
+
     float sum = 0.0f;
-    for (int j = 0; j < m; ++j) sum += mat[IDX(i,j,m)];
-    avgs[i] = sum / m;
+    // Single-threaded summation
+    for (int j = 0; j < m; ++j) {
+        sum += mat[IDX(row,j,m)];
+    }
+    avgs[row] = sum / m;
 }

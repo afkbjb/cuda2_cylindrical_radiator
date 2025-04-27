@@ -1,28 +1,30 @@
-# Makefile - 支持 Task 1 (CPU版) 和 Task 2 (CUDA版)，适合所有文件在同一目录的情况
-
-# ------ Task 1 (CPU版) 配置 ------
 CPU_TARGET = radiator_cpu
 CPU_SRC = main.cpp radiator_cpu.cpp
-CPU_CXX = g++
-CPU_CXXFLAGS = -std=c++11 -O2
 
-# ------ Task 2 (CUDA版) 配置 ------
-CUDA_TARGET = radiator_gpu
-CUDA_SRC = main.cu radiator_gpu.cu radiator_cpu.cpp
-CUDA_NVCC = nvcc
-CUDA_NVCCFLAGS = -std=c++11 -O2
+GPU_TARGET = radiator_gpu
+GPU_SRC = main.cu radiator_gpu.cu radiator_cpu.cpp
 
-# ------ 默认目标 ------
-all: cpu cuda
+GPU_TASK3_TARGET = radiator_gpu_task3
+GPU_TASK3_SRC = main_task3.cu radiator_gpu.cu radiator_cpu.cpp
 
-# ------ 编译 CPU版 ------
-cpu: $(CPU_SRC)
-	$(CPU_CXX) $(CPU_CXXFLAGS) $(CPU_SRC) -o $(CPU_TARGET)
+CXX = g++
+NVCC = nvcc
 
-# ------ 编译 CUDA版 ------
-cuda: $(CUDA_SRC)
-	$(CUDA_NVCC) $(CUDA_NVCCFLAGS) $(CUDA_SRC) -o $(CUDA_TARGET)
+CXXFLAGS = -std=c++11 -O2 -Wall -Wextra
+NVCCFLAGS = -std=c++11 -O2 -I. -Xcompiler "-Wall -Wextra"
 
-# ------ 清理 ------
+all: $(CPU_TARGET) $(GPU_TARGET) $(GPU_TASK3_TARGET)
+
+$(CPU_TARGET): $(CPU_SRC)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
+$(GPU_TARGET): $(GPU_SRC)
+	$(NVCC) $(NVCCFLAGS) $^ -o $@
+
+$(GPU_TASK3_TARGET): $(GPU_TASK3_SRC)
+	$(NVCC) $(NVCCFLAGS) $^ -o $@
+
 clean:
-	rm -f $(CPU_TARGET) $(CUDA_TARGET)
+	rm -f $(CPU_TARGET) $(GPU_TARGET) $(GPU_TASK3_TARGET)
+
+.PHONY: all clean
