@@ -1,0 +1,118 @@
+// 接近老师的 五秒
+liuy41@cuda01:~$ ./radiator_gpu_task3 -c -t -n 15360 -m 15360 -p 1000 -bx 16 -by 16
+GPU alloc: 0.317984 ms
+GPU H2D: 300.217 ms
+GPU propagate: 5086.88 ms
+GPU average: 11.2048 ms
+GPU D2H: 414.325 ms
+
+liuy41@cuda01:~$ ./radiator_gpu_task3 -c -t -n 15360 -m 15360 -p 1000 -bx 32 -by 8
+GPU alloc: 0.307136 ms
+GPU H2D: 299.934 ms
+GPU propagate: 2360.94 ms
+GPU average: 11.2211 ms
+GPU D2H: 416.563 ms
+liuy41@cuda01:~$
+
+liuy41@cuda01:~$ ./radiator_gpu_task3 -c -t -n 15360 -m 15360 -p 1000 -bx 64 -by 4
+GPU alloc: 0.315392 ms
+GPU H2D: 302.094 ms
+GPU propagate: 1537.41 ms
+GPU average: 11.1318 ms
+GPU D2H: 412.044 ms
+liuy41@cuda01:~$
+
+liuy41@cuda01:~$ ./radiator_gpu_task3 -t -n 15360 -m 15360 -p 10 -bx 16 -by 16
+CPU compute: 25946.4 ms
+GPU alloc: 0.2976 ms
+GPU H2D: 301.562 ms
+GPU propagate: 50.9378 ms
+GPU average: 11.2389 ms
+GPU D2H: 414.569 ms
+Matrix mismatches (>1e-4): 0, max diff: 7.15256e-07
+Average mismatches (>1e-4): 0, max diff: 1.49012e-07
+Speedup (CPU/GPU compute): 417.301
+
+liuy41@cuda01:~$ ./radiator_gpu_task3 -t -n 64 -m 64 -p 20 -bx 16 -by 16
+CPU compute: 0.870483 ms
+GPU alloc: 0.08768 ms
+GPU H2D: 0.033728 ms
+GPU propagate: 0.28576 ms
+GPU average: 0.022848 ms
+GPU D2H: 0.048736 ms
+Matrix mismatches (>1e-4): 0, max diff: 4.17233e-07
+Average mismatches (>1e-4): 0, max diff: 1.78814e-07
+Speedup (CPU/GPU compute): 2.82068
+
+liuy41@cuda01:~$ ./radiator_gpu_task3 -t -n 64 -m 64 -p 20 -bx 16 -by 4
+./radiator_gpu_task3 -t -n 128 -m 128 -p 20 -bx 16 -by 4
+./radiator_gpu_task3 -t -n 256 -m 256 -p 20 -bx 16 -by 4
+CPU compute: 1.27643 ms
+GPU alloc: 0.08672 ms
+GPU H2D: 0.030144 ms
+GPU propagate: 0.330656 ms
+GPU average: 0.03968 ms
+GPU D2H: 0.049184 ms
+Matrix mismatches (>1e-4): 0, max diff: 4.17233e-07
+Average mismatches (>1e-4): 0, max diff: 1.78814e-07
+Speedup: 3.44668
+CPU compute: 3.54843 ms
+GPU alloc: 0.086944 ms
+GPU H2D: 0.073984 ms
+GPU propagate: 0.31536 ms
+GPU average: 0.023392 ms
+GPU D2H: 0.080768 ms
+Matrix mismatches (>1e-4): 0, max diff: 4.76837e-07
+Average mismatches (>1e-4): 0, max diff: 1.49012e-07
+Speedup: 10.475
+CPU compute: 14.8135 ms
+GPU alloc: 0.089184 ms
+GPU H2D: 0.225184 ms
+GPU propagate: 0.355232 ms
+GPU average: 0.024832 ms
+GPU D2H: 0.180096 ms
+Matrix mismatches (>1e-4): 0, max diff: 5.36442e-07
+Average mismatches (>1e-4): 0, max diff: 2.68221e-07
+Speedup: 38.9765
+liuy41@cuda01:~$ ./radiator_gpu_task3 -t -n 512 -m 512 -p 20 -bx 16 -by 4
+CPU compute: 65.0549 ms
+GPU alloc: 0.147904 ms
+GPU H2D: 0.705216 ms
+GPU propagate: 0.392256 ms
+GPU average: 0.057024 ms
+GPU D2H: 0.721408 ms
+Matrix mismatches (>1e-4): 0, max diff: 5.96046e-07
+Average mismatches (>1e-4): 0, max diff: 2.38419e-07
+Speedup: 144.798
+liuy41@cuda01:~$ ./radiator_gpu_task3 -t -n 1024 -m 1024 -p 20 -bx 16 -by 4
+CPU compute: 232.17 ms
+GPU alloc: 0.19728 ms
+GPU H2D: 1.75536 ms
+GPU propagate: 0.801792 ms
+GPU average: 0.08624 ms
+GPU D2H: 2.0936 ms
+Matrix mismatches (>1e-4): 0, max diff: 6.55651e-07
+Average mismatches (>1e-4): 0, max diff: 2.98023e-07
+Speedup: 261.443
+
+liuy41@cuda01:~$ chmod +x benchmark_task3.sh
+liuy41@cuda01:~$ ./benchmark_task3.sh
+Done. Results in bench.csv
+liuy41@cuda01:~$ cat bench.csv
+bx,by,Propagate_ms,Average_ms,Total_ms
+16,16,5080.22,11.262,5091.48
+16,8,2853.9,11.2207,2865.12
+16,4,2775.67,11.1512,2786.82
+16,32,4919.54,11.2388,4930.78
+32,16,4512.6,11.1964,4523.8
+32,8,2372.31,11.2556,2383.57
+32,4,1665.33,11.2062,1676.54
+32,32,5424.38,11.193,5435.57
+64,16,5404.69,11.2432,5415.93
+64,8,2545.19,11.2402,2556.43
+64,4,1557.96,11.1843,1569.14
+64,32,0.791744,11.1748,11.9665
+8,16,3554.83,11.223,3566.05
+8,8,2985.23,11.182,2996.41
+8,4,5544.55,11.2022,5555.75
+8,32,3176.45,11.2356,3187.69
