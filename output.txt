@@ -1,3 +1,165 @@
+liuy41@cuda01:~$ # —— 小规模 64×64, p=20 ——
+./radiator_gpu_task3 -t -n 64   -m 64   -p 20 -bx 16 -by 16
+./radiator_gpu_task3 -t -n 64   -m 64   -p 20 -bx 16 -by 4
+./radiator_gpu_dp    -t -n 64   -m 64   -p 20 -bx 16 -by 8
+
+# —— 中等规模 1024×1024, p=100 ——
+./radiator_gpu_task3 -t -n 1024 -m 1024 -p 100 -bx 16 -by 16
+./radiator_gpu_task3 -t -n 1024 -m 1024 -p 100 -bx 16 -by 4
+./radiator_gpu_dp    -t -n 1024 -m 1024 -p 100 -bx 16 -by 8
+
+# —— 中大规模 8192×8192, p=1000 ——
+./radiator_gpu_task3 -c -t -n 8192 -m 8192 -p 1000 -bx 16 -by 16
+./radiator_gpu_task3 -c -t -n 8192 -m 8192 -p 1000 -bx 16 -by 4
+./radiator_gpu_dp    -c -t -n 8192 -m 8192 -p 1000 -bx 16 -by 8
+CPU compute: 0.864243 ms
+GPU alloc: 0.099936 ms
+GPU H2D: 0.03072 ms
+GPU propagate: 0.298592 ms
+GPU average: 0.024576 ms
+GPU D2H: 0.043904 ms
+Matrix mismatches (>1e-4): 0, max diff: 4.17233e-07
+Average mismatches (>1e-4): 0, max diff: 1.78814e-07
+Speedup: 2.67428
+CPU compute: 0.863397 ms
+GPU alloc: 0.095808 ms
+GPU H2D: 0.03072 ms
+GPU propagate: 0.292224 ms
+GPU average: 0.031072 ms
+GPU D2H: 0.044 ms
+Matrix mismatches (>1e-4): 0, max diff: 4.17233e-07
+Average mismatches (>1e-4): 0, max diff: 1.78814e-07
+Speedup: 2.67061
+CPU compute: 0.761983 ms
+GPU alloc: 0.103872 ms
+GPU H2D: 0.041536 ms
+GPU propagate: 0.299808 ms
+GPU average: 0.028736 ms
+GPU D2H: 0.041152 ms
+Matrix mismatches (>1e-8): 0, max diff: 3.33067e-16
+Average mismatches (>1e-8): 0, max diff: 1.11022e-16
+Speedup: 2.31927
+CPU compute: 1193.01 ms
+GPU alloc: 0.217856 ms
+GPU H2D: 1.89286 ms
+GPU propagate: 2.80941 ms
+GPU average: 0.085984 ms
+GPU D2H: 2.08934 ms
+Matrix mismatches (>1e-4): 0, max diff: 1.90735e-06
+Average mismatches (>1e-4): 0, max diff: 7.7486e-07
+Speedup: 412.036
+CPU compute: 1192.26 ms
+GPU alloc: 0.216192 ms
+GPU H2D: 1.92573 ms
+GPU propagate: 2.89466 ms
+GPU average: 0.09824 ms
+GPU D2H: 2.12406 ms
+Matrix mismatches (>1e-4): 0, max diff: 1.90735e-06
+Average mismatches (>1e-4): 0, max diff: 7.7486e-07
+Speedup: 398.364
+CPU compute: 1033.35 ms
+GPU alloc: 0.21872 ms
+GPU H2D: 3.39459 ms
+GPU propagate: 5.75558 ms
+GPU average: 0.399552 ms
+GPU D2H: 4.02022 ms
+Matrix mismatches (>1e-8): 0, max diff: 1.33227e-15
+Average mismatches (>1e-8): 0, max diff: 7.49401e-16
+Speedup: 167.884
+GPU alloc: 0.274016 ms
+GPU H2D: 95.6845 ms
+GPU propagate: 1311.21 ms
+GPU average: 2.70755 ms
+GPU D2H: 120.973 ms
+GPU alloc: 0.275584 ms
+GPU H2D: 95.6404 ms
+GPU propagate: 1315.34 ms
+GPU average: 2.732 ms
+GPU D2H: 120.815 ms
+GPU alloc: 0.316384 ms
+GPU H2D: 239.087 ms
+GPU propagate: 2998.49 ms
+GPU average: 13.9204 ms
+GPU D2H: 290.248 ms
+liuy41@cuda01:~$
+
+liuy41@cuda01:~$ ./radiator_gpu_task3 -t -n 64   -m 64   -p 20 -bx 16 -by 16
+./radiator_gpu_task3 -t -n 64   -m 64   -p 20 -bx 16 -by 4
+./radiator_gpu_dp    -t -n 64   -m 64   -p 20 -bx 16 -by 8
+
+./radiator_gpu_task3 -t -n 1024 -m 1024 -p 100 -bx 16 -by 16
+./radiator_gpu_task3 -t -n 1024 -m 1024 -p 100 -bx 16 -by 4
+./radiator_gpu_dp    -t -n 1024 -m 1024 -p 100 -bx 16 -by 8
+
+./radiator_gpu_task3 -c -t -n 15360 -m 15360 -p 1000 -bx 16 -by 16
+./radiator_gpu_task3 -c -t -n 15360 -m 15360 -p 1000 -bx 16 -by 4
+./radiator_gpu_dp    -c -t -n 15360 -m 15360 -p 1000 -bx 16 -by 8
+CPU compute: 0.862771 ms
+GPU alloc: 0.096448 ms
+GPU H2D: 0.032096 ms
+GPU propagate: 42.8646 ms
+GPU average: 0.026848 ms
+GPU D2H: 0.057184 ms
+Matrix mismatches (>1e-4): 0, max diff: 4.17233e-07
+Average mismatches (>1e-4): 0, max diff: 1.78814e-07
+Speedup: 0.0201152
+CPU compute: 0.86261 ms
+GPU alloc: 0.09888 ms
+GPU H2D: 0.034816 ms
+GPU propagate: 0.360256 ms
+GPU average: 0.026144 ms
+GPU D2H: 0.049216 ms
+Matrix mismatches (>1e-4): 0, max diff: 4.17233e-07
+Average mismatches (>1e-4): 0, max diff: 1.78814e-07
+Speedup: 2.23243
+CPU compute: 0.73246 ms
+GPU alloc: 0.100192 ms
+GPU H2D: 0.041856 ms
+GPU propagate: 0.707968 ms
+GPU average: 0.029664 ms
+GPU D2H: 0.05248 ms
+Matrix mismatches (>1e-8): 0, max diff: 3.33067e-16
+Average mismatches (>1e-8): 0, max diff: 1.11022e-16
+Speedup: 0.992988
+CPU compute: 1200.23 ms
+GPU alloc: 0.214272 ms
+GPU H2D: 1.98723 ms
+GPU propagate: 2.92397 ms
+GPU average: 0.087552 ms
+GPU D2H: 2.1215 ms
+Matrix mismatches (>1e-4): 0, max diff: 1.90735e-06
+Average mismatches (>1e-4): 0, max diff: 7.7486e-07
+Speedup: 398.545
+CPU compute: 1193.02 ms
+GPU alloc: 0.2168 ms
+GPU H2D: 1.94054 ms
+GPU propagate: 2.93558 ms
+GPU average: 0.094304 ms
+GPU D2H: 2.08813 ms
+Matrix mismatches (>1e-4): 0, max diff: 1.90735e-06
+Average mismatches (>1e-4): 0, max diff: 7.7486e-07
+Speedup: 393.751
+CPU compute: 1035.67 ms
+GPU alloc: 0.216832 ms
+GPU H2D: 3.42826 ms
+GPU propagate: 5.83267 ms
+GPU average: 0.397408 ms
+GPU D2H: 4.0097 ms
+Matrix mismatches (>1e-8): 0, max diff: 1.33227e-15
+Average mismatches (>1e-8): 0, max diff: 7.49401e-16
+Speedup: 166.237
+GPU alloc: 0.345248 ms
+GPU H2D: 335.622 ms
+GPU propagate: 5146.27 ms
+GPU average: 11.2255 ms
+GPU D2H: 449.719 ms
+GPU alloc: 0.34992 ms
+GPU H2D: 335.277 ms
+GPU propagate: 4925.68 ms
+GPU average: 11.2315 ms
+GPU D2H: 499.77 ms
+CUDA error: out of memory
+
 // 接近老师的 五秒
 liuy41@cuda01:~$ ./radiator_gpu_task3 -c -t -n 15360 -m 15360 -p 1000 -bx 16 -by 16
 GPU alloc: 0.317984 ms
