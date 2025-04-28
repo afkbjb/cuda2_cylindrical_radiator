@@ -1,36 +1,82 @@
-CPU_TARGET = radiator_cpu
-CPU_SRC    = main.cpp radiator_cpu.cpp
+CPU_DIR := cpu
+GPU_DIR := gpu
 
-GPU_TARGET = radiator_gpu
-GPU_SRC    = main.cu radiator_gpu.cu radiator_cpu.cpp
+CXX  := g++
+NVCC := nvcc
 
-GPU_TASK3_TARGET = radiator_gpu_task3
-GPU_TASK3_SRC    = main_task3.cu radiator_gpu.cu radiator_cpu.cpp
+CXXFLAGS  := -O2 -Wall -Wextra -std=c++11 -I$(CPU_DIR) -I$(GPU_DIR)
+NVCCFLAGS := -std=c++11 -O2 -Xcompiler "-Wall -Wextra" -I$(CPU_DIR) -I$(GPU_DIR)
 
-DP_TARGET = radiator_gpu_dp
-DP_SRC    = main_task4_dp.cu radiator_gpu_dp.cu radiator_cpu_dp.cpp
+CPU_OUT        := radiator_cpu
+GPU_OUT        := radiator_gpu
+GPU_TASK3_OUT  := radiator_gpu_task3
+GPU_DP_OUT     := radiator_gpu_dp
 
-CXX  = g++
-NVCC = nvcc
-
-CXXFLAGS  = -std=c++11 -O2 -Wall -Wextra
-NVCCFLAGS = -std=c++11 -O2 -I. -Xcompiler "-Wall -Wextra"
-
-all: $(CPU_TARGET) $(GPU_TARGET) $(GPU_TASK3_TARGET) $(DP_TARGET)
-
-$(CPU_TARGET): $(CPU_SRC)
-	$(CXX) $(CXXFLAGS) $^ -o $@
-
-$(GPU_TARGET): $(GPU_SRC)
-	$(NVCC) $(NVCCFLAGS) $^ -o $@
-
-$(GPU_TASK3_TARGET): $(GPU_TASK3_SRC)
-	$(NVCC) $(NVCCFLAGS) $^ -o $@
-
-$(DP_TARGET): $(DP_SRC)
-	$(NVCC) $(NVCCFLAGS) $^ -o $@
-
-clean:
-	rm -f $(CPU_TARGET) $(GPU_TARGET) $(GPU_TASK3_TARGET) $(DP_TARGET)
+CPU_OBJ        := radiator_cpu.o
+CPU_DP_OBJ     := radiator_cpu_dp.o
 
 .PHONY: all clean
+
+all: $(CPU_OUT) $(CPU_OBJ) $(CPU_DP_OBJ) \
+     $(GPU_OUT) $(GPU_TASK3_OUT) $(GPU_DP_OUT)
+
+$(CPU_OUT): \
+    $(CPU_DIR)/main.cpp \
+    $(CPU_DIR)/radiator_cpu.cpp \
+    $(CPU_DIR)/radiator_cpu.h
+	$(CXX) $(CXXFLAGS) \
+	    $(CPU_DIR)/main.cpp \
+	    $(CPU_DIR)/radiator_cpu.cpp \
+	    -o $@
+
+$(CPU_OBJ): \
+    $(CPU_DIR)/radiator_cpu.cpp \
+    $(CPU_DIR)/radiator_cpu.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(CPU_DP_OBJ): \
+    $(CPU_DIR)/radiator_cpu_dp.cpp \
+    $(CPU_DIR)/radiator_cpu_dp.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(GPU_OUT): \
+    $(GPU_DIR)/main.cu \
+    $(GPU_DIR)/radiator_gpu.cu \
+    $(GPU_DIR)/radiator_gpu.h \
+    $(CPU_OBJ)
+	$(NVCC) $(NVCCFLAGS) \
+	    $(GPU_DIR)/main.cu \
+	    $(GPU_DIR)/radiator_gpu.cu \
+	    $(CPU_OBJ) \
+	    -o $@
+
+$(GPU_TASK3_OUT): \
+    $(GPU_DIR)/main_task3.cu \
+    $(GPU_DIR)/radiator_gpu.cu \
+    $(GPU_DIR)/radiator_gpu.h \
+    $(CPU_OBJ)
+	$(NVCC) $(NVCCFLAGS) \
+	    $(GPU_DIR)/main_task3.cu \
+	    $(GPU_DIR)/radiator_gpu.cu \
+	    $(CPU_OBJ) \
+	    -o $@
+
+$(GPU_DP_OUT): \
+    $(GPU_DIR)/main_task4_dp.cu \
+    $(GPU_DIR)/radiator_gpu_dp.cu \
+    $(GPU_DIR)/radiator_gpu_dp.h \
+    $(CPU_DP_OBJ)
+	$(NVCC) $(NVCCFLAGS) \
+	    $(GPU_DIR)/main_task4_dp.cu \
+	    $(GPU_DIR)/radiator_gpu_dp.cu \
+	    $(CPU_DP_OBJ) \
+	    -o $@
+
+clean:
+	rm -f \
+	    $(CPU_OUT) \
+	    $(CPU_OBJ) \
+	    $(CPU_DP_OBJ) \
+	    $(GPU_OUT) \
+	    $(GPU_TASK3_OUT) \
+	    $(GPU_DP_OUT)
